@@ -9,3 +9,14 @@
   align-items: center;
   justify-content: center;
 }
+
+.reviews-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ant-image .ant-image-img {
+  object-fit: contain;
+}

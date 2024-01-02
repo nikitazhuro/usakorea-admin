@@ -1,13 +1,13 @@
 import { jwtDecode } from 'jwt-decode';
 import { $host, $authHost } from './index';
 
-export const login = async (login, password) => {
-  const { data } = await $host.post('user/login', { login, password });
-  localStorage.setItem('accessToken', data.accessToken);
-  return jwtDecode(data.accessToken);
+export const login = async (creads) => {
+  const { data } = await $host.post('auth/login', creads);
+  localStorage.setItem('accessToken', data);
+  return jwtDecode(data);
 };
 
 export const authCheck = async () => {
-  const { data } = await $authHost.get('user/auth');
+  const { data } = await $authHost.get('auth/check');
   return data;
 };

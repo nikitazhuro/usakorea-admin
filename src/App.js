@@ -9,6 +9,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { authCheck } from './http/userApi';
 import LoginForm from './components/LoginForm/LoginForm';
 import Loader from './components/Loader/Loader';
+import { observer } from 'mobx-react-lite';
 
 const { Header, Content, Footer } = Layout;
 
@@ -20,7 +21,7 @@ const items = [
 
 export const Context = createContext(null);
 
-const App = () => {
+const App = observer(() => {
   const [defaultSelected, setDefaultSelected] = useState([]);
   const { user } = useContext(Context);
   const [isLoading, setIsLoading] = useState(true);
@@ -125,9 +126,9 @@ const App = () => {
           <AppRouter />
         </div>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
+      <Footer style={{ textAlign: 'center' }}>© 2023 USAKOREA. Все права защищены</Footer>
     </Layout>
   );
-};
+});
 
 export default App;

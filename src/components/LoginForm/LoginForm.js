@@ -1,6 +1,8 @@
-import React from 'react';
-import { Button, Form, Input, Select, Space } from 'antd';
-const { Option } = Select;
+import React, { useContext } from 'react';
+import { Button, Form, Input, Space } from 'antd';
+import { login } from '../../http/userApi';
+import { Context } from '../../App';
+
 const layout = {
   labelCol: {
     span: 8,
@@ -9,37 +11,30 @@ const layout = {
     span: 16,
   },
 };
+
 const tailLayout = {
   wrapperCol: {
     offset: 8,
     span: 16,
   },
 };
+
 const LoginForm = () => {
   const [form] = Form.useForm();
-  const onGenderChange = (value) => {
-    switch (value) {
-      case 'male':
-        form.setFieldsValue({
-          note: 'Hi, man!',
-        });
-        break;
-      case 'female':
-        form.setFieldsValue({
-          note: 'Hi, lady!',
-        });
-        break;
-      case 'other':
-        form.setFieldsValue({
-          note: 'Hi there!',
-        });
-        break;
-      default:
+  const { user } = useContext(Context);
+
+  const onFinish = async (values) => {
+    try {
+      const data = await login(values);
+
+      user.setIsAuth(true);
+      user.setUser(data);
+
+    } catch (error) {
+      console.log(error);
     }
   };
-  const onFinish = (values) => {
-    console.log(values);
-  };
+
   return (
     <Form
       {...layout}
