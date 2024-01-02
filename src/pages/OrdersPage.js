@@ -22,7 +22,7 @@ const OrdersPage = () => {
 
     if (data) {
       try {
-        await updateOrder({...data, id });
+        await updateOrder({ ...data, id });
         api.success({
           message: 'Заявка обновлена успешно',
           description: 'Для получения актуальных данных обновите страницу',
@@ -47,20 +47,17 @@ const OrdersPage = () => {
     {
       title: 'Id',
       dataIndex: 'id',
-      sorter: true,
       width: '4%',
     },
     {
       title: 'Create',
       dataIndex: 'createdAt',
-      sorter: true,
       render: (data) => dayjs(data).format('DD-MM-YYYY, HH:mm'),
       width: '15%',
     },
     {
       title: 'Name',
       dataIndex: 'name',
-      sorter: true,
       width: '10%',
     },
     {
@@ -156,6 +153,7 @@ const OrdersPage = () => {
       <Col span={24}><h1>Заявки</h1></Col>
       <Col span={24}>
         <Table
+          scroll={{ y: 'calc(100vh - 410px)' }}
           columns={columns}
           rowKey={(record) => record.id}
           dataSource={data}

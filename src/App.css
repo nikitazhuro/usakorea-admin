@@ -20,3 +20,10 @@
 .ant-image .ant-image-img {
   object-fit: contain;
 }
+
+.upload_img {
+  margin-top: 10px;
+  width: 430px;
+  height: 300px;
+  object-fit: cover;
+}

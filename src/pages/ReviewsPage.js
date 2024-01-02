@@ -1,4 +1,4 @@
-import { Button, Col, Input, Modal, Row, Table, notification } from "antd";
+import { Button, Col, Input, Modal, Popconfirm, Row, Table, notification } from "antd";
 import { useEffect, useState } from "react";
 import { createReview, deleteReview, getAllRevies, updateReview } from "../http/reviewsApi";
 import dayjs from "dayjs";
@@ -40,12 +40,13 @@ const ReviewsPage = () => {
     try {
       await deleteReview(id);
       api.success({
-        message: 'Заявка удалена успешно',
-        description: 'Для получения актуальных данных обновите страницу',
+        message: 'Отзыв удален успешно',
       });
+
+      await fetchData();
     } catch (error) {
       api.error({
-        message: 'Ошибка при удалении ордера',
+        message: 'Ошибка при удалении отзыва',
         description: error.message,
       });
     }
@@ -55,7 +56,6 @@ const ReviewsPage = () => {
     setDataToUpdate((prev) => ({ ...prev, [id]: { ...prev[id], grade: target.value } }));
   }
   const onChangeDate = ({ target }, id) => {
-    console.log(target.value);
     setDataToUpdate((prev) => ({ ...prev, [id]: { ...prev[id], date: target.value } }));
   }
   const onChangeComment = ({ target }, id) => {
@@ -66,20 +66,17 @@ const ReviewsPage = () => {
     {
       title: 'Id',
       dataIndex: 'id',
-      sorter: true,
       width: '4%',
     },
     {
       title: 'Create',
       dataIndex: 'createdAt',
-      sorter: true,
       render: (data) => dayjs(data).format('DD-MM-YYYY, HH:mm'),
       width: '15%',
     },
     {
       title: 'Name',
       dataIndex: 'name',
-      sorter: true,
       width: '10%',
     },
     {
@@ -137,13 +134,19 @@ const ReviewsPage = () => {
       dataIndex: 'id',
       render: (id) => {
         return (
-          <Row>
+          <Row style={{ gap: '5px' }}>
             <Button onClick={() => updateRow(id)} disabled={!dataToUpdate[id]}>
               Update
             </Button>
-            <Button onClick={() => deleteRow(id)}>
-              Delete
-            </Button>
+            <Popconfirm
+              title="Delete the document"
+              description="Are you sure to delete this document?"
+              onConfirm={() => deleteRow(id)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button danger>Delete</Button>
+            </Popconfirm>
           </Row>
         )
       }
@@ -200,6 +203,8 @@ const ReviewsPage = () => {
     await createReview(createReviewData);
 
     setIsModalOpen(false);
+
+    await fetchData();
   };
 
   const handleCancel = () => {
@@ -209,6 +214,7 @@ const ReviewsPage = () => {
   useEffect(() => {
     fetchData();
   }, [JSON.stringify(tableParams)]);
+
   return (
     <Row>
       {contextHolder}
@@ -259,6 +265,7 @@ const ReviewsPage = () => {
       </Modal>
       <Col span={24}>
         <Table
+          scroll={{ y: 'calc(100vh - 410px)' }}
           columns={columns}
           rowKey={(record) => record.id}
           dataSource={data}

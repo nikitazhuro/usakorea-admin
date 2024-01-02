@@ -1,14 +1,14 @@
-import { Button, Col, Image, Input, Row, Switch, Table, notification } from "antd";
+import { Button, Col, Image, Input, Modal, Popconfirm, Row, Switch, Table, notification } from "antd";
 import { createDeliveredCar, deleteDeliveredCar, getAllDeliveredCars, updateDeliveredCar } from "../http/deliveredCars";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 const DeliveredPage = () => {
   const [file, setFile] = useState(null);
-
   const [data, setData] = useState();
   const [dataToUpdate, setDataToUpdate] = useState({});
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
@@ -41,8 +41,8 @@ const DeliveredPage = () => {
       await deleteDeliveredCar(id);
       api.success({
         message: 'Запись удалена успешно',
-        description: 'Для получения актуальных данных обновите страницу',
       });
+      await fetchData();
     } catch (error) {
       api.error({
         message: 'Ошибка при удалении записи',
@@ -50,17 +50,6 @@ const DeliveredPage = () => {
       });
     }
   }
-
-  const uploadImage = async () => {
-    const formData = new FormData();
-
-    formData.append('image', file);
-
-    await createDeliveredCar(formData);
-
-    setFile(null);
-  }
-
 
   const onChange = (e) => {
     const file = e.target.files[0];
@@ -75,33 +64,31 @@ const DeliveredPage = () => {
     {
       title: 'Id',
       dataIndex: 'id',
-      sorter: true,
       width: '4%',
     },
     {
       title: 'Create',
       dataIndex: 'createdAt',
-      sorter: true,
       render: (data) => dayjs(data).format('DD-MM-YYYY, HH:mm'),
       width: '15%',
     },
     {
-      title: 'Name',
+      title: 'Image',
       dataIndex: 'image',
-      sorter: true,
       render: (image) => {
         return (
-          <Image width={400} height={200} src={`http://localhost:5000/${image}`} />
+          <Image src={`http://localhost:5000/${image}`} />
         )
       },
       width: '20%',
     },
     {
-      title: 'Show',
+      title: 'Show on site',
       dataIndex: 'show',
       render: (value, row) => {
         const { id } = row;
         const currentComplete = dataToUpdate[id]?.show;
+
         return (
           <Switch
             value={currentComplete == undefined ? value : currentComplete}
@@ -115,13 +102,19 @@ const DeliveredPage = () => {
       dataIndex: 'id',
       render: (id) => {
         return (
-          <Row>
+          <Row style={{ gap: '5px' }}>
             <Button onClick={() => updateRow(id)} disabled={!dataToUpdate[id]}>
               Update
             </Button>
-            <Button onClick={() => deleteRow(id)}>
-              Delete
-            </Button>
+            <Popconfirm
+              title="Delete the document"
+              description="Are you sure to delete this document?"
+              onConfirm={() => deleteRow(id)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button danger>Delete</Button>
+            </Popconfirm>
           </Row>
         )
       }
@@ -163,26 +156,59 @@ const DeliveredPage = () => {
     }
   };
 
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = async () => {
+    const formData = new FormData();
+
+    formData.append('image', file);
+
+    await createDeliveredCar(formData);
+
+    setFile(null);
+
+    setIsModalOpen(false);
+    await fetchData();
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   useEffect(() => {
     fetchData();
   }, [JSON.stringify(tableParams)]);
 
   return (
     <Row>
-      <Col span={24} className="reviews-page-header">
-        <h1>Отзывы</h1>
-        <div>
-          {file && (
-            <img width={200} height={200} src={URL.createObjectURL(file)} alt="image" />
-          )}
-          <Input type="file" onChange={onChange} />
-          <Button onClick={uploadImage}>
-            Create
-          </Button>
-        </div>
+      {contextHolder}
+      <Col style={{ height: '40px' }} span={24} className="reviews-page-header">
+        <h1>Доставленные авто</h1>
+        <Button onClick={showModal}>
+          Create
+        </Button>
       </Col>
+      <Modal
+        width={478}
+        destroyOnClose
+        title="Add photo:"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <div>
+          <Input type="file" onChange={onChange} />
+          {file && (
+            <Image src={URL.createObjectURL(file)} alt="image" className="upload_img" />
+          )}
+        </div>
+
+      </Modal>
       <Col span={24}>
         <Table
+          scroll={{ y: 'calc(100vh - 410px)' }}
           columns={columns}
           rowKey={(record) => record.id}
           dataSource={data}
