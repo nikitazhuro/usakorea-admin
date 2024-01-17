@@ -77,7 +77,7 @@ const DeliveredPage = () => {
       dataIndex: 'image',
       render: (image) => {
         return (
-          <Image src={`http://localhost:5000/${image}`} />
+          <Image src={`https://api.autosaya.by/${image}`} />
         )
       },
       width: '20%',
