@@ -208,7 +208,7 @@ const DeliveredPage = () => {
       </Modal>
       <Col span={24}>
         <Table
-          scroll={{ y: 'calc(100vh - 410px)' }}
+          scroll={{ y: 'calc(100vh - 410px)', x: 768 }}
           columns={columns}
           rowKey={(record) => record.id}
           dataSource={data}
