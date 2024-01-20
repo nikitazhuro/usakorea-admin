@@ -116,16 +116,11 @@ const App = observer(() => {
           style={{ flex: 1, minWidth: 0 }}
         />
       </Header>
-      <Content style={{ padding: '0 48px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb>
+      <Content>
         <div
           style={{
             background: colorBgContainer,
-            height: 'calc(100vh - 185px)',
+            height: 'calc(100vh - 64px)',
             padding: 24,
             borderRadius: borderRadiusLG,
           }}
@@ -133,7 +128,6 @@ const App = observer(() => {
           <AppRouter />
         </div>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>© 2023 USAKOREA. Все права защищены</Footer>
     </Layout>
   );
 });

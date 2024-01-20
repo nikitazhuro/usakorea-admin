@@ -153,7 +153,7 @@ const OrdersPage = () => {
       <Col span={24}><h1>Заявки</h1></Col>
       <Col span={24}>
         <Table
-          scroll={{ y: 'calc(100vh - 410px)', x: 768 }}
+          scroll={{ y: 'calc(100vh - 289px)', x: 768 }}
           columns={columns}
           rowKey={(record) => record.id}
           dataSource={data}

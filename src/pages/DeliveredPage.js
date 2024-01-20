@@ -77,7 +77,7 @@ const DeliveredPage = () => {
       dataIndex: 'image',
       render: (image) => {
         return (
-          <Image src={`https://api.autosaya.by/${image}`} />
+          <Image width={100} src={`https://api.autosaya.by/${image}`} />
         )
       },
       width: '20%',
@@ -208,7 +208,7 @@ const DeliveredPage = () => {
       </Modal>
       <Col span={24}>
         <Table
-          scroll={{ y: 'calc(100vh - 410px)', x: 768 }}
+          scroll={{ y: 'calc(100vh - 289px)', x: 768 }}
           columns={columns}
           rowKey={(record) => record.id}
           dataSource={data}
