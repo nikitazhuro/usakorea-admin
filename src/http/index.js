@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
 import axios from 'axios';
 
-const url = 'https://api.autosaya.by/'
+const url = 'https://api.autosaya.by/';
+const localhost = 'http://localhost:5000/';
 
 const $host = axios.create({
   baseURL: url,

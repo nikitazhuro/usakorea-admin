@@ -15,8 +15,9 @@ const { Header, Content, Footer } = Layout;
 
 const items = [
   { key: '1', label: 'Заявки' },
-  { key: '2', label: 'Отзывы' },
-  { key: '3', label: 'Доставленные авто' },
+  { key: '2', label: 'Отзывы на сайте' },
+  { key: '3', label: 'Отзывы пользователей' },
+  { key: '4', label: 'Доставленные авто' },
 ]
 
 export const Context = createContext(null);
@@ -38,8 +39,12 @@ const App = observer(() => {
         router('/reviews');
         setDefaultSelected(['2'])
         break;
-      case '3':
+      case '4':
         router('/delivered');
+        setDefaultSelected(['4'])
+        break;
+      case '3':
+        router('/users-reviews');
         setDefaultSelected(['3'])
         break;
       case '1':
@@ -71,8 +76,10 @@ const App = observer(() => {
       setDefaultSelected(['1'])
     } else if (location.pathname.includes('/reviews')) {
       setDefaultSelected(['2'])
-    } else if (location.pathname.includes('/delivered')) {
+    } else if (location.pathname.includes('/users-reviews')) {
       setDefaultSelected(['3'])
+    } else if (location.pathname.includes('/delivered')) {
+      setDefaultSelected(['4'])
     } else {
       setDefaultSelected(['1'])
     }
